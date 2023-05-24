@@ -7,13 +7,13 @@ public class Hospital {
     
     private String nombreH;
     private Ciudad ciudad;
-    private Byte especialidades;
-    private Doctores doctores;
-    private Enfermeros enfermeros;
+    private byte especialidades;
+    private Doctores[] doctores;
+    private Enfermeros[] enfermeros;
     private double sueldos;
     private String direccion;
     
-    public Hospital(String nh, Ciudad cd, Byte esp, Doctores dc, Enfermeros em, String dr ){
+    public Hospital(String nh, Ciudad cd, byte esp, Doctores[] dc, Enfermeros[] em, String dr ){
     
         nombreH = nh;
         ciudad = cd;
@@ -42,21 +42,37 @@ public class Hospital {
     
     }
     
-    public void establecerDoctores(Doctores c){
+    public void establecerDoctores(Doctores[] c){
     
         doctores = c;
     
     }
     
-    public void establecerEnfermeros(Enfermeros c){
+    public void establecerEnfermeros(Enfermeros[] c){
     
         enfermeros = c;
     
     }
     
     public void calcularSueldos(){
-    
-        sueldos = obtenerDoctores().obtenerSueldo() + obtenerEnfermeros().obtenerSueldo();
+        
+        double sueldoDc = 0;
+        double sueldoEn = 0;
+                
+        for(int i = 0; i < doctores.length; i++){
+            
+            sueldoDc = sueldoDc + doctores[i].obtenerSueldo();
+            
+        }
+        
+        for(int i = 0; i < enfermeros.length; i++){
+            
+            sueldoEn = sueldoEn + enfermeros[i].obtenerSueldo();
+            
+        }
+        
+        sueldos = sueldoDc + sueldoEn;
+       
     
     }
     
@@ -72,19 +88,19 @@ public class Hospital {
     
     }
     
-    public Byte obtenerEspecialidades(){
+    public byte obtenerEspecialidades(){
     
         return especialidades;
     
     }
     
-    public Doctores obtenerDoctores(){
+    public Doctores[] obtenerDoctores(){
     
         return doctores;
     
     }
     
-    public Enfermeros obtenerEnfermeros(){
+    public Enfermeros[] obtenerEnfermeros(){
     
         return enfermeros;
     
@@ -104,18 +120,33 @@ public class Hospital {
                 + "Ciudad: %s\n"
                 + "Provincia %s\n"
                 + "Numero de especialidades: %d\n"
-                + "Listado de médicos\n"
-                + "Valor minuto: %.2f\n"
-                + "Total de sueldos a pagar por mes: %.2f\n",
-                
+                + "Listado de médicos\n",
                 nombreH,
                 direccion,
                 ciudad.obtenerNombreC(),
                 ciudad.obtenerProvincia(),
-                especialidades,
-                sueldos);
+                especialidades);
+                
+        for(byte i =0; i < doctores.length; i++){
+        
+            cadena = String.format("%s- %s - sueldo: %.2f - %s\n",
+                    cadena,doctores[i].obtenerNombre(),doctores[i].obtenerSueldo(),doctores[i].obtenerEspecialidad());
+        }
+        
+        cadena = String.format("%s\n Listado de enfermeros(as)\n", cadena);
+                
+        for(byte i = 0; i < enfermeros.length; i++){
+            
+                cadena = String.format("%s- %s - sueldo: %.2f - %s\n",
+                        
+                        cadena,enfermeros[i].obtenerNombre(),enfermeros[i].obtenerSueldo(),enfermeros[i].obtenerTipo());
+                
+        }
+        
+        cadena = String.format("%s\n Total de sueldo a pagar por mes: %.2f\n", cadena,sueldos);
         
         return cadena;
+        
     }
     
 }
